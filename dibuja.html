@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dibuja tu historia</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .canvas-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 40px;
+    }
+
+    canvas {
+      border: 3px solid #333;
+      background-color: #fff;
+      cursor: crosshair;
+      border-radius: 10px;
+    }
+
+    .tools {
+      margin: 15px 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .color {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid #555;
+      cursor: pointer;
+    }
+
+    .canvas-buttons {
+      margin-top: 10px;
+    }
+
+    .canvas-buttons button {
+      margin: 5px;
+      padding: 10px 15px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .canvas-buttons button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Video de fondo -->
+  <div class="video-fondo-container">
+    <video autoplay muted loop playsinline>
+      <source src="vid/poco.mp4" type="video/mp4">
+      Tu navegador no soporta la reproducción de video.
+    </video>
+    <div class="contenido-encima"></div>
+  </div>
+
+  <!-- Barra con logo -->
+  <header class="barra">
+    <a href="index.html">
+      <img src="img/logo.jpg" alt="Logo" class="logo">
+    </a>
+  </header>
+
+  <!-- Texto principal -->
+  <section class="texto-principal">
+    <h1>¡Dibuja tu propia historia mágica!</h1>
+    <h2>Selecciona un color y dibuja libremente. ¡Guarda tu creación cuando termines!</h2>
+  </section>
+
+  <!-- Área para dibujar -->
+  <div class="canvas-container">
+    <canvas id="pizarra" width="500" height="400"></canvas>
+
+    <!-- Selector de colores -->
+    <div class="tools">
+      <div class="color" style="background: black;" onclick="cambiarColor('black')"></div>
+      <div class="color" style="background: red;" onclick="cambiarColor('red')"></div>
+      <div class="color" style="background: blue;" onclick="cambiarColor('blue')"></div>
+      <div class="color" style="background: green;" onclick="cambiarColor('green')"></div>
+      <div class="color" style="background: orange;" onclick="cambiarColor('orange')"></div>
+      <div class="color" style="background: purple;" onclick="cambiarColor('purple')"></div>
+      <div class="color" style="background: yellow;" onclick="cambiarColor('yellow')"></div>
+      <div class="color" style="background: pink;" onclick="cambiarColor('pink')"></div>
+      <div class="color" style="background: brown;" onclick="cambiarColor('brown')"></div>
+    </div>
+
+    <!-- Botones -->
+    <div class="canvas-buttons">
+      <button onclick="borrar()">Borrar</button>
+      <button onclick="guardar()">Guardar</button>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('pizarra');
+    const ctx = canvas.getContext('2d');
+    let dibujando = false;
+    let colorActual = "black";
+
+    canvas.addEventListener('mousedown', () => dibujando = true);
+    canvas.addEventListener('mouseup', () => dibujando = false);
+    canvas.addEventListener('mouseout', () => dibujando = false);
+
+    canvas.addEventListener('mousemove', function(e) {
+      if (dibujando) {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        ctx.fillStyle = colorActual;
+        ctx.beginPath();
+        ctx.arc(x, y, 3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    });
+
+    function cambiarColor(color) {
+      colorActual = color;
+    }
+
+    function borrar() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function guardar() {
+      const enlace = document.createElement('a');
+      enlace.download = "mi_dibujo.png";
+      enlace.href = canvas.toDataURL();
+      enlace.click();
+    }
+  </script>
+
+</body>
+</html>

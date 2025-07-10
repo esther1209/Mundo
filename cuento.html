@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comentarios</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .comentarios-container {
+      position: relative;
+      z-index: 2;
+      max-width: 700px;
+      margin: 120px auto;
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      font-family: Arial, sans-serif;
+    }
+
+    .comentarios-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .comentarios-container textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      resize: none;
+    }
+
+    .comentarios-container button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-weight: bold;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .comentarios-container button:hover {
+      background-color: #0056b3;
+    }
+
+    .comentario {
+      background-color: #f9f9f9;
+      border-left: 5px solid #007BFF;
+      margin-top: 15px;
+      padding: 10px 15px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fondo de video -->
+  <div class="video-fondo-container">
+    <video autoplay muted loop playsinline>
+      <source src="vid/poco.mp4" type="video/mp4">
+      Tu navegador no soporta la reproducción de video.
+    </video>
+    <div class="contenido-encima"></div>
+  </div>
+
+  <!-- Barra con logo -->
+  <header class="barra">
+    <a href="index.html">
+      <img src="img/logo.jpg" alt="Logo" class="logo">
+    </a>
+  </header>
+
+  <!-- Sección de comentarios -->
+  <div class="comentarios-container">
+    <h2>Comentarios mágicos</h2>
+    <textarea id="comentario" placeholder="Escribe tu comentario aquí..."></textarea>
+    <button onclick="guardarComentario()">Enviar</button>
+
+    <div id="listaComentarios"></div>
+  </div>
+
+  <script>
+    const comentariosKey = 'comentariosGuardados';
+
+    function cargarComentarios() {
+      const contenedor = document.getElementById('listaComentarios');
+      contenedor.innerHTML = '';
+      const comentarios = JSON.parse(localStorage.getItem(comentariosKey)) || [];
+      comentarios.forEach(texto => {
+        const div = document.createElement('div');
+        div.className = 'comentario';
+        div.textContent = texto;
+        contenedor.appendChild(div);
+      });
+    }
+
+    function guardarComentario() {
+      const textarea = document.getElementById('comentario');
+      const texto = textarea.value.trim();
+      if (texto === '') return;
+
+      const comentarios = JSON.parse(localStorage.getItem(comentariosKey)) || [];
+      comentarios.push(texto);
+      localStorage.setItem(comentariosKey, JSON.stringify(comentarios));
+      textarea.value = '';
+      cargarComentarios();
+    }
+
+    // Cargar los comentarios al iniciar
+    window.onload = cargarComentarios;
+  </script>
+
+</body>
+</html>
